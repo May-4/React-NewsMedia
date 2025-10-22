@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   return (
@@ -51,13 +52,10 @@ function NavItem() {
   return (
     <ul className="items-center justify-center space-y-8 md:flex md:space-x-8 md:space-y-0">
       <li className="text-white hover:text-emerald-200">
-        <a href={void 0}>Home</a>
+        <Link to={'/'}>Blogs</Link>
       </li>
       <li className="text-white hover:text-emerald-200">
-        <a href={void 0}>Blog</a>
-      </li>
-      <li className="text-white hover:text-emerald-200">
-        <a href={void 0}>Create</a>
+        <Link to='/create'>Create</Link>
       </li>
     </ul>
   );
