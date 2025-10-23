@@ -7,14 +7,14 @@ import { validate } from "../validation/index.js";
 const router = Router();
 
 // GET /users/
-router.get('/' ,BlogController.fetchBlog)
+router.get('/all' ,BlogController.fetchBlog)
 
 // GET /users/id
-router.get('/fetch/', blogIdValidator, validate, BlogController.fetchBlogById)
-router.get('/update/', blogIdValidator, validate, BlogController.updateBlogById)
-router.delete('/remove/', blogIdValidator, validate, BlogController.deleteBlogById)
+router.get('/fetchById', blogIdValidator, validate, BlogController.fetchBlogById)
+router.put('/update', blogIdValidator, validate, BlogController.updateBlogById)
+router.delete('/remove', blogIdValidator, validate, BlogController.deleteBlogById)
 
 // POST /users/
-router.post('/', blogCreateValidator, validate ,BlogController.createNewBlog);
+router.post('/saveBlog', blogCreateValidator, validate ,BlogController.createNewBlog);
 
 export default router;

@@ -47,7 +47,7 @@ export default function BlogCard({ blog, onDelete, onEdit }) {
         </button>
         <div className="flex-1 flex justify-end">
           <button
-            onClick={() => onViewDetail(blog)}
+            //onClick={() => onViewDetail(blog)}
             className="mt-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             View Details

@@ -1,11 +1,15 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import cors from "cors";
 import blogRouter from './routes/blog.route.js';
 
 dotenv.config()
 const app = express();
 const env = process.env;
+
+//Allow all origins // No 'Access-Control-Allow-Origin' header is present
+app.use(cors());
 
 // parses JSON bodies
 app.use(express.json());
