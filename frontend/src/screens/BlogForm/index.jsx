@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import blogApi from "../../services/BlogApi";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 export const BlogForm = () => {
+  const [searchParams] = useSearchParams();
+  const updateId = searchParams.get("updateId");
+  const location = useLocation();
+  const { updateBlog } = location.state || {};
+
+  const isEdit = Boolean(updateId) && Boolean(updateBlog);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
@@ -12,6 +19,18 @@ export const BlogForm = () => {
     tags: "",
     published: false,
   });
+
+  useEffect(() => {
+    if (!isEdit) return;
+    setFormData({
+      title: updateBlog.title,
+      author: updateBlog.author,
+      content: updateBlog.content,
+      tags: updateBlog.tags?.join(","),
+      published: updateBlog.published,
+    });
+  }, [updateBlog, isEdit]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     console.log("check type---", type);
@@ -23,6 +42,7 @@ export const BlogForm = () => {
   };
 
   const handleSubmit = (e) => {
+    
     // prevent page reload
     e.preventDefault();
 
@@ -33,28 +53,55 @@ export const BlogForm = () => {
         ?.map((item) => item.trim())
         .filter(Boolean),
     };
-    saveBlog(blogData);
+
+    isEdit ? updateBlogData(blogData) : saveBlog(blogData);
   };
-  const saveBlog = async (data) => {
+
+  const saveBlog = useCallback(async (data) => {
     try {
       const response = await blogApi.saveBlog({ data });
       if (response.statusCode == "000") {
-        toast.success("Blog updated successfully!");
+        toast.success("Blog created successfully!");
+        setTimeout(() => navigate("/post"), 800);
         setFormData({
           title: "",
           author: "",
           content: "",
           tags: "",
           published: false,
-        });
-        navigate("/post");
+        });        
       } else {
         toast.success(response.message);
       }
     } catch (error) {
-      toast.success("Blog updated failed! ", error.message);
+      toast.success("Blog created failed! ", error.message);
     }
-  };
+  }, []);
+
+  const updateBlogData = useCallback(
+    async (data) => {
+      try {
+        const response = await blogApi.updateBlogById(updateId, { data });
+        if (response.statusCode == "000") {
+          toast.success("Blog updated successfully!");
+          setTimeout(() => navigate("/post"), 800);
+          setFormData({
+            title: "",
+            author: "",
+            content: "",
+            tags: "",
+            published: false,
+          });
+        } else {
+          toast.success(response.message);
+        }
+      } catch (error) {
+        toast.success("Blog updated failed! ", error.message);
+      }
+    },
+    [updateId]
+  );
+
   return (
     <>
       <form
@@ -62,7 +109,7 @@ export const BlogForm = () => {
         className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md space-y-4 my-4"
       >
         <h2 className="text-2xl font-bold mb-8 text-gray-800 text-center">
-          Create Blog
+          {isEdit ? "Update" : "Create"} Blog
         </h2>
 
         {/* Title */}

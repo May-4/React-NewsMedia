@@ -34,7 +34,7 @@ export default function BlogCard({ blog, onDelete, onEdit }) {
       <div className="h-[0.5px] bg-emerald-100 my-4 shadow-sm" />
       <div className="flex gap-0.5 ">
         <button
-          onClick={() => onEdit(blog)}
+          onClick={() => onEdit(blog._id)}
           className="bg-yellow-400 text-white px-4 py-2 rounded-l-full hover:bg-yellow-500"
         >
           Edit

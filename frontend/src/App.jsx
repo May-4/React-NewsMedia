@@ -1,13 +1,15 @@
+import { useState } from "react";
 import "./App.css";
 import NavBar from "./components/navbar";
 import { Outlet } from "react-router-dom";
 
 function App() {
+   const [searchTerm, setSearchTerm] = useState("");
   return (
     <>
-      <NavBar />
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {/* ------For Nested Child Component----- */}
-      {<Outlet />}
+      {<Outlet context={{ searchTerm }} />}
     </>
   );
 }
